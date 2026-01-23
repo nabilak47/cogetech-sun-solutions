@@ -57,6 +57,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Cogetech custom colors
+        cogetech: {
+          orange: "hsl(var(--cogetech-orange))",
+          "orange-light": "hsl(var(--cogetech-orange-light))",
+          "orange-dark": "hsl(var(--cogetech-orange-dark))",
+          charcoal: "hsl(var(--cogetech-charcoal))",
+          gray: "hsl(var(--cogetech-gray))",
+          light: "hsl(var(--cogetech-light))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
