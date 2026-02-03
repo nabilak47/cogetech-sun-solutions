@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sun, Zap, Droplets, Settings } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
-import heroImage from '@/assets/hero-solar-farm.jpg';
+import heroImage from '@/assets/cogetech-logo.jpg';
 
 const HeroSection = () => {
   const { t, dir } = useLanguage();
