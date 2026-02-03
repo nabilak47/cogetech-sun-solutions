@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
-import { Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Send } from 'lucide-react';
 
 const ContactForm = () => {
   const { t } = useLanguage();
@@ -11,49 +11,24 @@ const ContactForm = () => {
     subject: '',
     message: '',
   });
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('sending');
+    
+    const emailBody = `Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
 
-    try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          access_key: 'YOUR_WEB3FORMS_ACCESS_KEY', // User needs to replace this
-          to_email: 'Cogetech.elec@gmail.com',
-          from_name: formData.name,
-          subject: `Cogetech Contact: ${formData.subject}`,
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          message: formData.message,
-        }),
-      });
+Message:
+${formData.message}`;
 
-      const result = await response.json();
-
-      if (result.success) {
-        setStatus('success');
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-        setTimeout(() => setStatus('idle'), 3000);
-      } else {
-        setStatus('error');
-        setTimeout(() => setStatus('idle'), 3000);
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      setStatus('error');
-      setTimeout(() => setStatus('idle'), 3000);
-    }
+    const mailtoLink = `mailto:Cogetech.elec@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(emailBody)}`;
+    
+    window.open(mailtoLink, '_blank');
   };
 
   return (
@@ -136,30 +111,10 @@ const ContactForm = () => {
 
       <button
         type="submit"
-        disabled={status === 'sending'}
-        className="btn-hero w-full md:w-auto flex items-center justify-center gap-2 disabled:opacity-70"
+        className="btn-hero w-full md:w-auto flex items-center justify-center gap-2"
       >
-        {status === 'sending' ? (
-          <>
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            {t.contact.form.sending}
-          </>
-        ) : status === 'success' ? (
-          <>
-            <CheckCircle className="w-5 h-5" />
-            {t.contact.form.success}
-          </>
-        ) : status === 'error' ? (
-          <>
-            <AlertCircle className="w-5 h-5" />
-            {t.contact.form.error}
-          </>
-        ) : (
-          <>
-            <Send className="w-5 h-5" />
-            {t.contact.form.submit}
-          </>
-        )}
+        <Send className="w-5 h-5" />
+        {t.contact.form.submit}
       </button>
     </form>
   );
